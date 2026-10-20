@@ -1,0 +1,27 @@
+# Lite subset: n8n with SQLite only. No Postgres profile and no nginx snippet.
+# Image tag is a variable. Check upstream docs.
+# The full pack adds the postgres profile, the nginx snippet, and the checklist.
+
+name: ${COMPOSE_PROJECT_NAME:-n8n}
+
+services:
+  n8n:
+    image: ${N8N_IMAGE}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${N8N_HOST_PORT}:5678"
+    environment:
+      DB_TYPE: sqlite
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY}
+      N8N_HOST: ${N8N_HOST}
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: ${N8N_PROTOCOL}
+      N8N_WEBHOOK_URL: ${N8N_WEBHOOK_URL}
+      N8N_PROXY_HOPS: ${N8N_PROXY_HOPS}
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+      TZ: ${TZ}
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
